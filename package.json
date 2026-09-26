@@ -1,0 +1,29 @@
+{
+  "name": "site-back-end",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "Connect/Connect.js",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.4",
+    "express": "^5.2.1",
+    "mongoose": "^9.10.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node Connect/Connect.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gabo-1234/Site-Back-End.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Gabo-1234/Site-Back-End/issues"
+  },
+  "homepage": "https://github.com/Gabo-1234/Site-Back-End#readme",
+  "description": ""
+}
