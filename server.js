@@ -1,13 +1,44 @@
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+import dotenv from "dotenv";
 
 dotenv.config();
 
-try {
-  console.log('Connecting to MongoDB...');
-  await mongoose.connect(process.env.MONGO_URI);
-  console.log('Successfully connected to MongoDB!');
-} catch (err) {
-  console.error('MongoDB connection error:', err);
-  process.exit(1);
-}
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Connect to MongoDB Atlas
+mongoose
+	.connect(process.env.MONGO_URI)
+	.then(() => console.log("MongoDB connected"))
+	.catch((err) => console.error("MongoDB connection error:", err));
+
+// Health endpoint — confirms server + DB status
+app.get("/health", async (req, res) => {
+	try {
+		await mongoose.connection.asPromise();
+		res.json({
+			status: "ok",
+			database: "connected",
+			timestamp: new Date().toISOString(),
+		});
+	} catch (err) {
+		res.json({
+			status: "ok",
+			database: "disconnected",
+			error: err.message,
+			timestamp: new Date().toISOString(),
+		});
+	}
+});
+
+app.listen(PORT, () => {
+	console.log(`Server running on http://localhost:${PORT}`);
+});
+
+export default app;
