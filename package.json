@@ -2,7 +2,7 @@
   "name": "site-back-end",
   "version": "1.0.0",
   "type": "module",
-  "main": "Connect/Connect.js",
+  "main": "server.js",
   "dependencies": {
     "cors": "^2.8.6",
     "dotenv": "^18.0.4",
@@ -12,7 +12,8 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node Connect/Connect.js"
+    "start": "node server.js",
+    "dev": "node --watch server.js"
   },
   "repository": {
     "type": "git",
