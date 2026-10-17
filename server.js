@@ -3,6 +3,9 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import { pathToFileURL } from "node:url";
+import categoryRoutes from "./routes/categories.js";
+import productRoutes from "./routes/products.js";
+import uploadRoutes from "./upload.js";
 
 dotenv.config();
 
@@ -51,6 +54,37 @@ app.get("/health", async (req, res) => {
 			timestamp: new Date().toISOString(),
 		});
 	}
+});
+
+app.use("/api", async (req, res, next) => {
+	await connectDB();
+	next();
+});
+
+app.use("/api/categories", categoryRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/uploads", uploadRoutes);
+
+app.use((req, res) => {
+	res.status(404).json({ message: "Route not found" });
+});
+
+app.use((err, req, res, next) => {
+	if (err.name === "ValidationError") {
+		return res.status(400).json({ message: err.message });
+	}
+	if (err.name === "CastError") {
+		return res.status(400).json({ message: "Invalid value" });
+	}
+	if (err.code === 11000) {
+		return res.status(409).json({ message: "Already exists" });
+	}
+	if (err.type === "entity.parse.failed" || err.status === 400) {
+		return res.status(400).json({ message: "Not valid JSON" });
+	}
+
+	console.error("Request error:", err);
+	res.status(500).json({ message: "Something went wrong" });
 });
 
 // Locally: node server.js starts the server. On Vercel the file is imported instead.
